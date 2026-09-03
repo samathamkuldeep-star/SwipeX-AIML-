@@ -1,0 +1,98 @@
+[
+  {
+    "job_id": "job_py_01",
+    "title": "Senior Python & FastAPI Backend Engineer",
+    "company": "CloudScale AI",
+    "type": "Full-time",
+    "location": "San Francisco, CA",
+    "remote": true,
+    "salary_range": "$140,000 - $180,000",
+    "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "Redis", "REST API", "Microservices", "Git"],
+    "description": "We are seeking an experienced Backend Engineer to design and scale high-throughput REST APIs and microservices. You will build asynchronous services with FastAPI, design performant PostgreSQL schemas, cache critical data in Redis, and deploy containerized services using Docker and Kubernetes in a modern CI/CD pipeline.",
+    "posted_at": "2026-08-25T10:00:00Z"
+  },
+  {
+    "job_id": "job_react_02",
+    "title": "Frontend React & TypeScript Developer",
+    "company": "PixelCraft Studio",
+    "type": "Full-time",
+    "location": "New York, NY",
+    "remote": true,
+    "salary_range": "$120,000 - $155,000",
+    "skills": ["React", "TypeScript", "JavaScript", "Tailwind CSS", "HTML5", "CSS3", "Redux", "Next.js", "Jest"],
+    "description": "Join our product team to build responsive, accessible web applications. You will translate Figma designs into pixel-perfect React components, manage state with Redux/Zustand, optimize client-side rendering with Next.js, and style modern interfaces using Tailwind CSS.",
+    "posted_at": "2026-08-26T11:30:00Z"
+  },
+  {
+    "job_id": "job_ml_03",
+    "title": "Machine Learning & NLP Engineer",
+    "company": "Nexus Career AI",
+    "type": "Full-time",
+    "location": "Seattle, WA",
+    "remote": true,
+    "salary_range": "$150,000 - $195,000",
+    "skills": ["Python", "PyTorch", "scikit-learn", "NLP", "spaCy", "Transformers", "pandas", "NumPy", "SQL"],
+    "description": "Looking for an applied ML Engineer to lead our NLP recommendation systems. Responsibilities include building text extraction pipelines, training sentence embedding models, developing semantic search indices, fine-tuning LLMs, and performing offline evaluation with metrics like NDCG and MRR.",
+    "posted_at": "2026-08-27T09:15:00Z"
+  },
+  {
+    "job_id": "job_fullstack_04",
+    "title": "Full Stack Engineer (Node / React / AWS)",
+    "company": "Veloce Technologies",
+    "type": "Full-time",
+    "location": "Austin, TX",
+    "remote": false,
+    "salary_range": "$130,000 - $165,000",
+    "skills": ["JavaScript", "TypeScript", "Node.js", "React", "AWS", "MongoDB", "Express", "GraphQL", "Docker"],
+    "description": "Full stack engineer needed to develop user-facing web applications and GraphQL APIs. You will work across the entire stack: React on the frontend, Node.js and Express on backend services, MongoDB for document storage, and AWS infrastructure (ECS, Lambda, S3).",
+    "posted_at": "2026-08-28T14:00:00Z"
+  },
+  {
+    "job_id": "job_devops_05",
+    "title": "Site Reliability & Cloud Platform Engineer",
+    "company": "InfraGuard Systems",
+    "type": "Full-time",
+    "location": "Boston, MA",
+    "remote": true,
+    "salary_range": "$145,000 - $185,000",
+    "skills": ["Kubernetes", "Docker", "Terraform", "AWS", "CI/CD", "Linux", "Python", "Prometheus", "Git"],
+    "description": "We are looking for a DevOps/SRE specialist to maintain our multi-region Kubernetes clusters, automate cloud infrastructure via Terraform on AWS, build robust GitHub Actions CI/CD pipelines, and implement observability using Prometheus and Grafana.",
+    "posted_at": "2026-08-29T16:45:00Z"
+  },
+  {
+    "job_id": "job_qa_06",
+    "title": "QA Automation Engineer",
+    "company": "FinTech Prime",
+    "type": "Full-time",
+    "location": "Chicago, IL",
+    "remote": true,
+    "salary_range": "$105,000 - $135,000",
+    "skills": ["Python", "Selenium", "pytest", "CI/CD", "Postman", "SQL", "Git", "API Testing", "Jira"],
+    "description": "Develop and maintain automated end-to-end and API testing suites. Write test cases in Python using pytest and Playwright/Selenium, validate REST APIs with Postman, and integrate test suites directly into CI pipelines to guarantee software reliability.",
+    "posted_at": "2026-08-30T08:00:00Z"
+  },
+  {
+    "job_id": "job_junior_07",
+    "title": "Junior Software Developer (Backend / Python)",
+    "company": "EarlyStage Labs",
+    "type": "Internship",
+    "location": "San Jose, CA",
+    "remote": true,
+    "salary_range": "$75,000 - $95,000",
+    "skills": ["Python", "FastAPI", "SQL", "Git", "HTML5", "CSS3", "JavaScript"],
+    "description": "Great opportunity for a junior engineer or recent graduate to learn and contribute to real-world production web services. You will build REST endpoints with Python and FastAPI, write database queries, and collaborate using Git.",
+    "posted_at": "2026-08-31T12:00:00Z"
+  },
+  {
+    "job_id": "job_data_08",
+    "title": "Data Analyst & Business Intelligence",
+    "company": "InsightFlow Analytics",
+    "type": "Full-time",
+    "location": "Denver, CO",
+    "remote": true,
+    "salary_range": "$95,000 - $125,000",
+    "skills": ["SQL", "Python", "pandas", "Tableau", "PowerBI", "Data Analysis", "Excel", "Statistics"],
+    "description": "Transform raw business and user interaction data into actionable insights. Build interactive dashboards in Tableau/PowerBI, write complex SQL aggregations, and perform exploratory data analysis with Python and pandas.",
+    "posted_at": "2026-09-01T15:20:00Z"
+  }
+]
