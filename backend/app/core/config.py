@@ -13,10 +13,12 @@ class Settings(BaseModel):
 
     UPLOAD_DIR: Path = BASE_DIR / "storage" / "resumes"
     MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024
-    ALLOWED_EXTENSIONS: set[str] = {".pdf", ".txt"}
+    ALLOWED_EXTENSIONS: set[str] = {".pdf", ".docx", ".txt"}
     ALLOWED_MIME_TYPES: set[str] = {
         "application/pdf",
         "text/plain",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword",
         "application/octet-stream",
     }
 
@@ -25,10 +27,19 @@ class Settings(BaseModel):
 
     REQUIRED_SKILLS_WEIGHT: float = 0.70
     KEYWORD_OVERLAP_WEIGHT: float = 0.30
-    GENERATED_BY_TAG: str = "heuristic-v0"
+    GENERATED_BY_TAG: str = "blended-v2"
+
+    CHROMADB_HOST: str = "chromadb"
+    CHROMADB_PORT: int = 8001
+    EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
+
+    BLENDED_KEYWORD_WEIGHT: float = 0.50
+    BLENDED_SEMANTIC_WEIGHT: float = 0.50
+    ATS_TARGET_THRESHOLD: float = 80.0
 
 
 settings = Settings()
 
 settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
+

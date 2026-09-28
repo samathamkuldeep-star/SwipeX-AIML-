@@ -51,6 +51,31 @@ def test_partial_match_and_missing_keywords():
     assert "Kubernetes" in missing
 
 
+def test_detailed_keyword_score_and_threshold_detection():
+    resume = ResumeRecord(
+        resume_id="res_test_3",
+        original_filename="partial.txt",
+        file_path="/tmp/partial.txt",
+        file_type=".txt",
+        raw_text="Python developer working on REST APIs and Git.",
+        parsed_skills=["Python", "REST API", "Git"],
+    )
+    job = JobDetail(
+        job_id="job_test_3",
+        title="Senior Python Developer",
+        company="ScaleCorp",
+        skills=["Python", "FastAPI", "PostgreSQL", "Docker", "Kubernetes"],
+        description="Build scalable microservices with Python, FastAPI, PostgreSQL, Docker, and Kubernetes.",
+    )
+    score, missing_skills, missing_keywords = (
+        ats_scoring_engine.calculate_detailed_keyword_score(resume, job)
+    )
+    assert score < 80.0
+    assert "FastAPI" in missing_skills
+    assert "Kubernetes" in missing_skills
+    assert len(missing_keywords) > 0
+
+
 def test_get_ats_score_not_found():
     with pytest.raises(HTTPException) as exc_info:
         ats_scoring_engine.get_ats_score(resume_id="non_existent_id", job_id="job_py_01")

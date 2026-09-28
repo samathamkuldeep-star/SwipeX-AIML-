@@ -84,6 +84,36 @@ class ResumeParserService:
         full_text = "\n".join(text_content).strip()
         return full_text
 
+    def extract_text_from_docx(self, file_bytes: bytes) -> str:
+        try:
+            import docx
+
+            doc = docx.Document(io.BytesIO(file_bytes))
+            text_lines = [p.text for p in doc.paragraphs if p.text and p.text.strip()]
+            for table in doc.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        if cell.text and cell.text.strip():
+                            text_lines.append(cell.text.strip())
+            return "\n".join(text_lines).strip()
+        except Exception:
+            try:
+                import xml.etree.ElementTree as ET
+                import zipfile
+
+                with zipfile.ZipFile(io.BytesIO(file_bytes)) as z:
+                    xml_content = z.read("word/document.xml")
+                    tree = ET.fromstring(xml_content)
+                    texts = [
+                        node.text for node in tree.iter() if node.tag.endswith("t") and node.text
+                    ]
+                    return " ".join(texts).strip()
+            except Exception as fallback_err:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"Unable to parse DOCX content: {fallback_err!s}",
+                )
+
     def extract_text_from_txt(self, file_bytes: bytes) -> str:
         for encoding in ["utf-8", "utf-8-sig", "latin-1", "cp1252", "ascii"]:
             try:
@@ -119,6 +149,8 @@ class ResumeParserService:
 
         if ext == ".pdf":
             raw_text = self.extract_text_from_pdf(file_bytes)
+        elif ext == ".docx":
+            raw_text = self.extract_text_from_docx(file_bytes)
         elif ext == ".txt":
             raw_text = self.extract_text_from_txt(file_bytes)
         else:

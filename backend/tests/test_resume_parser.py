@@ -1,10 +1,24 @@
 import asyncio
 import io
+import zipfile
 
 import pytest
 from fastapi import HTTPException, UploadFile
 
 from backend.app.services.resume_parser import ResumeParserService, resume_repo
+
+
+def create_dummy_docx_bytes() -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        xml_content = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+            "<w:body><w:p><w:r><w:t>Alex Rivera Python FastAPI Docker Developer Resume</w:t></w:r></w:p></w:body>"
+            "</w:document>"
+        )
+        z.writestr("word/document.xml", xml_content)
+    return buf.getvalue()
 
 
 def test_extract_text_from_txt(sample_txt_frontend):
@@ -27,6 +41,16 @@ def test_extract_text_from_pdf(sample_pdf_backend):
     assert "PostgreSQL" in text
 
 
+def test_extract_text_from_docx():
+    parser = ResumeParserService()
+    docx_bytes = create_dummy_docx_bytes()
+    ext, text = parser.validate_and_extract_text("alex_resume.docx", docx_bytes)
+    assert ext == ".docx"
+    assert "Alex Rivera" in text
+    assert "Python" in text
+    assert "FastAPI" in text
+
+
 def test_empty_file_upload_error():
     parser = ResumeParserService()
     with pytest.raises(HTTPException) as exc_info:
@@ -38,7 +62,7 @@ def test_empty_file_upload_error():
 def test_unsupported_file_extension():
     parser = ResumeParserService()
     with pytest.raises(HTTPException) as exc_info:
-        parser.validate_and_extract_text("resume.docx", b"dummy content here")
+        parser.validate_and_extract_text("resume.exe", b"dummy content here")
     assert exc_info.value.status_code == 400
     assert "unsupported" in exc_info.value.detail.lower()
 

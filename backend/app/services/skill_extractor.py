@@ -122,6 +122,28 @@ class SkillExtractor:
                 compiled_list.append(re.compile(pattern, flags))
             self._compiled_patterns[canonical_name] = compiled_list
 
+        self._nlp = None
+        try:
+            import spacy
+            self._nlp = spacy.load("en_core_web_sm")
+        except Exception:
+            self._nlp = None
+
+    def extract_skills_spacy_ner(self, text: str) -> set[str]:
+        if not self._nlp or not text:
+            return set()
+        found: set[str] = set()
+        try:
+            doc = self._nlp(text[:5000])  # limit length for fast performance
+            for ent in doc.ents:
+                if ent.label_ in ("ORG", "PRODUCT", "LANGUAGE", "NORP"):
+                    matched = self.extract_skills(ent.text)
+                    if matched:
+                        found.update(matched)
+        except Exception:
+            pass
+        return found
+
     def extract_skills(self, text: str) -> list[str]:
         if not text or not text.strip():
             return []
@@ -134,6 +156,10 @@ class SkillExtractor:
                 if regex.search(text) or regex.search(cleaned_text):
                     found_skills.add(canonical_name)
                     break
+
+        if self._nlp:
+            spacy_skills = self.extract_skills_spacy_ner(text)
+            found_skills.update(spacy_skills)
 
         return sorted(found_skills, key=lambda s: s.lower())
 

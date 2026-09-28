@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, File, Form, Header, Query, UploadFile, status
 
 from backend.app.models.schemas import (
+    AISuggestionResponse,
     ATSScoreResponse,
     ResumeUploadResponse,
 )
+from backend.app.services.ai_suggestions import AISuggestionsEngine, ai_suggestions_engine
 from backend.app.services.ats_scorer import ATSScoringEngine, ats_scoring_engine
 from backend.app.services.resume_parser import (
     ResumeParserService,
@@ -18,10 +20,10 @@ router = APIRouter(prefix="/resume", tags=["Resume & Career Intelligence"])
     response_model=ResumeUploadResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Upload and parse a candidate resume",
-    description="Accepts a PDF or TXT resume file via multipart/form-data, securely stores it, extracts technical skills, and returns the assigned resume_id and parsed_skills list.",
+    description="Accepts a PDF, DOCX, or TXT resume file via multipart/form-data, securely stores it, extracts technical skills, and returns assigned resume_id and parsed_skills.",
 )
 async def upload_resume(
-    file: UploadFile = File(..., description="Resume file (.pdf or .txt)"),
+    file: UploadFile = File(..., description="Resume file (.pdf, .docx, .txt)"),
     user_id: str | None = Form(None, description="Optional user ID to associate with this resume"),
     x_user_id: str | None = Header(
         None, alias="X-User-ID", description="Optional user ID from Auth Gateway header"
@@ -37,8 +39,8 @@ async def upload_resume(
     "/{resume_id}/ats-score",
     response_model=ATSScoreResponse,
     status_code=status.HTTP_200_OK,
-    summary="Calculate heuristic ATS match score against a job",
-    description="Computes rule-based ATS compatibility score ('heuristic-v0') between the parsed resume and specified job, listing missing keywords.",
+    summary="Calculate blended ATS match score against a job",
+    description="Computes 50/50 blended ATS compatibility score (Keyword Overlap + Semantic Embedding Similarity) between resume and job, listing missing skills.",
 )
 def get_resume_ats_score(
     resume_id: str,
@@ -46,3 +48,18 @@ def get_resume_ats_score(
     scorer: ATSScoringEngine = Depends(lambda: ats_scoring_engine),
 ) -> ATSScoreResponse:
     return scorer.get_ats_score(resume_id=resume_id, job_id=job_id)
+
+
+@router.get(
+    "/{resume_id}/suggestions",
+    response_model=AISuggestionResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get AI-powered resume optimization suggestions",
+    description="Generates actionable resume improvement recommendations to reach an 80%+ ATS match score with free rule-based fallback generator.",
+)
+def get_resume_suggestions(
+    resume_id: str,
+    job_id: str = Query(..., description="ID of the target job"),
+    engine: AISuggestionsEngine = Depends(lambda: ai_suggestions_engine),
+) -> AISuggestionResponse:
+    return engine.get_suggestions_for_resume(resume_id=resume_id, job_id=job_id)
